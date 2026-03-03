@@ -58,3 +58,38 @@ Kedua alur ini membentuk pipeline otomatis yang menjamin setiap perubahan kode t
 
 </details>
 
+<details><summary><b>Module 03 - Maintainability & OO Principles</b></summary>
+
+# Reflection
+
+### 1) SOLID Principles Applied:
+
+- **Single Responsibility Principle (SRP)**: Class `CarController` yang sebelumnya berada di dalam `ProductController.java` dipindahkan ke file tersendiri. Tujuannya agar `ProductController` tidak lagi menangani dua entitas berbeda sekaligus (Product dan Car). Dengan begitu, setiap controller memiliki satu tanggung jawab yang jelas dan tidak saling bercampur.
+
+- **Liskov Substitution Principle (LSP)**: Hubungan inheritance (`extends`) antara `CarController` dan `ProductController` dihapuskan karena secara konsep `CarController` bukan turunan yang valid dari `ProductController`. Keduanya mengelola model yang berbeda, sehingga hubungan inheritance tersebut tidak tepat dan berpotensi menimbulkan inkonsistensi dalam behavior.
+
+- **Open-Closed Principle (OCP)**: Setelah dipisahkan (tahap apply SRP dan LSP), struktur kode menjadi lebih terbuka untuk dikembangkan tanpa harus mengubah kode yang sudah ada. Misalnya, jika nanti ingin menambahkan jenis kendaraan baru seperti motor, kita cukup membuat controller dan service baru tanpa perlu memodifikasi `CarController` atau `ProductController`. Hal ini meminimalkan risiko munculnya bug pada kode yang sudah stabil.
+
+- **Interface Segregation Principle (ISP)**: `CarService` dan `ProductService` sudah dibuat terpisah dan spesifik sesuai kebutuhan masing-masing entitas. Dengan begitu, setiap implementation class hanya mengimplementasikan method yang memang digunakan. Pemutusan hubungan inheritance antara `CarController` dan `ProductController` juga bertujuan agar `CarController` tidak dipaksa untuk memiliki akses ke dependensi `ProductService` yang sebenarnya tidak dibutuhkannya.
+
+- **Dependency Inversion Principle (DIP)**: Dependensi pada `CarController` juga sudah diubah agar tidak lagi langsung bergantung pada `CarServiceImpl`, melainkan pada interface `CarService`. Perubahan ini dilakukan dengan menyesuaikan tipe data pada anotasi `@Autowired`. Dengan demikian, controller sebagai modul tingkat tinggi bergantung pada abstraksi (interface), bukan pada kelas implementasi concrete. Dengan demikian kode menjadi lebih fleksibel dan mudah dikembangkan ke depannya.
+
+
+### 2) Advantages of Applying SOLID Principles
+
+- **Kemudahan Perawatan dan Debugging (SRP + LSP)**: Dengan memisahkan responsibility, melacak error jadi lebih mudah dan fokus. Contoh: Jika terjadi kesalahan pada proses penghapusan mobil, kita cukup memeriksa metode `deleteCarById` di `CarController` dan `CarService`. Tidak perlu khawatir perubahan tersebut akan merusak fitur `Product` karena kodenya sudah terisolasi di file yang berbeda.
+
+- **Fleksibilitas dalam Pengembangan Fitur Baru (OCP)**: Sistem menjadi lebih mudah adapt perubahan kebutuhan tanpa mengganggu existing code yang sudah stabil. Contoh: Apabila nantinya ada kebutuhan untuk menambahkan validasi khusus pada `Car` (misalnya harga tidak boleh nol), hanya perlu memperbarui logic di `CarServiceImpl`. Modul lain seperti `Product` atau UI-nya tidak akan terdampak.
+
+- **Proses Unit Testing yang Lebih Efisien (DIP + SRP)**: Struktur yang terdiri dari bagian-bagian kecil memungkinkan setiap komponen diuji secara mandiri dengan lebih mudah. Contoh: Karena `CarController` sekarang bergantung pada interface `CarService`, kita bisa menggunakan `mock` untuk melakukan testing pada Controller tanpa harus menjalankan seluruh logic di Repository. Ini membuat testing lebih cepat dan tidak rentan fail akibat masalah di layer lain.
+
+### 3) Disadvantages of Not Applying SOLID Principles
+
+- **Ketergantungan yang Kaku dan Rapuh (DIP)**: Tanpa abstraksi, setiap perubahan kecil pada satu bagian dapat merusak bagian lainnya unexpectedly. Contoh: Jika `CarController` langsung bergantung pada `CarServiceImpl` (concrete implementation class), maka setiap kali struktur di Service diubah, terpaksa harus mengubah banyak baris kode di Controller juga, yang meningkatkan risiko munculnya bug baru.
+
+- **Risiko Konflik Mapping dan Perilaku Tidak Konsisten (LSP)**: Penerapan inheritance yang tidak tepat dapat menyebabkan masalah pada fungsionalitas dasar app/web. Contoh: Sebelum refactor, `CarController` inherit `ProductController`. Hal ini berisiko menyebabkan Ambiguous Mapping pada route seperti `/edit/{id}` karena aplikasi bingung menentukan apakah route tersebut milik produk atau mobil, yang bisa berujung pada kegagalan aplikasi saat dijalankan.
+
+- **Kode yang Sulit Dibaca dan Dipahami (SRP + ISP)**: File yang "gemuk" dan mengurusi banyak hal sekaligus akan memperlambat proses development. Contoh: Jika semua logic controller tetap berada dalam satu file `ProductController.java`, developer lain akan kesulitan mencari fungsi spesifik. Selain itu, menambahkan satu field baru saja bisa memaksa kita untuk memperbarui banyak metode sekaligus di tempat yang tidak relevan.
+
+</details>
+
