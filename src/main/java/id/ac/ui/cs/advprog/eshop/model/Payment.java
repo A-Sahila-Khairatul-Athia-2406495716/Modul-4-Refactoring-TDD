@@ -24,6 +24,10 @@ public class Payment {
             this.status = validateVoucher(paymentData.get("voucherCode"))
                     ? PaymentStatus.SUCCESS.getValue()
                     : PaymentStatus.REJECTED.getValue();
+        } else if (method.equals(PaymentMethod.BANK_TRANSFER.getValue())) {
+            this.status = validateBankTransfer(paymentData)
+                    ? PaymentStatus.SUCCESS.getValue()
+                    : PaymentStatus.REJECTED.getValue();
         } else {
             this.status = PaymentStatus.PENDING.getValue();
         }
@@ -36,6 +40,13 @@ public class Payment {
 
         long digitCount = code.chars().filter(Character::isDigit).count();
         return digitCount == 8;
+    }
+
+    private boolean validateBankTransfer(Map<String, String> data) {
+        String bankName = data.get("bankName");
+        String referenceCode = data.get("referenceCode");
+        return bankName != null && !bankName.isEmpty()
+                && referenceCode != null && !referenceCode.isEmpty();
     }
 
     public void setStatus(String paymentStatus) {
