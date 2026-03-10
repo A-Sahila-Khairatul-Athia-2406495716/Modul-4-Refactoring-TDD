@@ -19,18 +19,20 @@ public class Payment {
         this.method = method;
         this.paymentData = paymentData;
         this.order = order;
+        this.status = determineStatus(method, paymentData);
+    }
 
+    private String determineStatus(String method, Map<String, String> data) {
         if (method.equals(PaymentMethod.VOUCHER.getValue())) {
-            this.status = validateVoucher(paymentData.get("voucherCode"))
+            return validateVoucher(data.get("voucherCode"))
                     ? PaymentStatus.SUCCESS.getValue()
                     : PaymentStatus.REJECTED.getValue();
         } else if (method.equals(PaymentMethod.BANK_TRANSFER.getValue())) {
-            this.status = validateBankTransfer(paymentData)
+            return validateBankTransfer(data)
                     ? PaymentStatus.SUCCESS.getValue()
                     : PaymentStatus.REJECTED.getValue();
-        } else {
-            this.status = PaymentStatus.PENDING.getValue();
         }
+        return PaymentStatus.PENDING.getValue();
     }
 
     private boolean validateVoucher(String code) {
