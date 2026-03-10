@@ -104,4 +104,26 @@ class PaymentServiceImplTest {
         List<Payment> result = paymentService.getAllPayments();
         assertEquals(2, result.size());
     }
+
+    @Test
+    void testAddPaymentBankTransferValid() {
+        Map<String, String> data = new HashMap<>();
+        data.put("bankName", "BCA");
+        data.put("referenceCode", "REF123456");
+
+        Payment payment = paymentService.addPayment(order, PaymentMethod.BANK_TRANSFER.getValue(), data);
+        verify(paymentRepository, times(1)).save(any(Payment.class));
+        assertEquals(PaymentStatus.SUCCESS.getValue(), payment.getStatus());
+    }
+
+    @Test
+    void testAddPaymentBankTransferInvalid() {
+        Map<String, String> data = new HashMap<>();
+        data.put("bankName", "");
+        data.put("referenceCode", "REF123456");
+
+        Payment payment = paymentService.addPayment(order, PaymentMethod.BANK_TRANSFER.getValue(), data);
+        verify(paymentRepository, times(1)).save(any(Payment.class));
+        assertEquals(PaymentStatus.REJECTED.getValue(), payment.getStatus());
+    }
 }

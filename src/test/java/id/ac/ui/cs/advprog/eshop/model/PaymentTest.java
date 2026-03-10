@@ -69,4 +69,48 @@ class PaymentTest {
         Payment payment = new Payment("pay-005", PaymentMethod.VOUCHER.getValue(), order, paymentData);
         assertEquals(PaymentStatus.REJECTED.getValue(), payment.getStatus());
     }
+
+    // Bank Transfer: Happy Path
+
+    @Test
+    void testCreatePaymentBankTransferValid() {
+        paymentData.put("bankName", "BCA");
+        paymentData.put("referenceCode", "REF123456");
+        Payment payment = new Payment("pay-006", PaymentMethod.BANK_TRANSFER.getValue(), order, paymentData);
+        assertEquals(PaymentStatus.SUCCESS.getValue(), payment.getStatus());
+    }
+
+    // Bank Transfer: Unhappy Paths
+
+    @Test
+    void testCreatePaymentBankTransferNullBankName() {
+        paymentData.put("bankName", null);
+        paymentData.put("referenceCode", "REF123456");
+        Payment payment = new Payment("pay-007", PaymentMethod.BANK_TRANSFER.getValue(), order, paymentData);
+        assertEquals(PaymentStatus.REJECTED.getValue(), payment.getStatus());
+    }
+
+    @Test
+    void testCreatePaymentBankTransferEmptyBankName() {
+        paymentData.put("bankName", "");
+        paymentData.put("referenceCode", "REF123456");
+        Payment payment = new Payment("pay-008", PaymentMethod.BANK_TRANSFER.getValue(), order, paymentData);
+        assertEquals(PaymentStatus.REJECTED.getValue(), payment.getStatus());
+    }
+
+    @Test
+    void testCreatePaymentBankTransferNullReferenceCode() {
+        paymentData.put("bankName", "BCA");
+        paymentData.put("referenceCode", null);
+        Payment payment = new Payment("pay-009", PaymentMethod.BANK_TRANSFER.getValue(), order, paymentData);
+        assertEquals(PaymentStatus.REJECTED.getValue(), payment.getStatus());
+    }
+
+    @Test
+    void testCreatePaymentBankTransferEmptyReferenceCode() {
+        paymentData.put("bankName", "BCA");
+        paymentData.put("referenceCode", "");
+        Payment payment = new Payment("pay-010", PaymentMethod.BANK_TRANSFER.getValue(), order, paymentData);
+        assertEquals(PaymentStatus.REJECTED.getValue(), payment.getStatus());
+    }
 }
