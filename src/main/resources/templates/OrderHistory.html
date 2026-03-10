@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><title>Order History</title></head>
+<body>
+<h1>Order History</h1>
+<form method="post" th:action="@{/order/history}">
+    <label>Name: <input type="text" name="author"/></label><br/>
+    <button type="submit">Search</button>
+</form>
+</body>
+</html>

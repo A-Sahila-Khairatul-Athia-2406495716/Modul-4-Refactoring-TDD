@@ -93,3 +93,31 @@ Kedua alur ini membentuk pipeline otomatis yang menjamin setiap perubahan kode t
 
 </details>
 
+<details><summary><b>Module 04 - Refactoring & TDD</b></summary>
+
+# Reflection
+
+### 1. Evaluating Testing Objectives
+Alur Test-Driven Development (TDD) yang diikuti selama pengerjaan fitur Order ini sangat bermanfaat dalam menjaga kualitas kode melalui tiga aspek utama:
+
+- **Correctness**: Menulis test terlebih dahulu di fase [RED] memaksa kita untuk memikirkan dulu requirement requirement lebih dulu sebelum nulis kode. Happy path dan unhappy path sudah dicakup dengan baik, dan edge case seperti case sensitivity pada `findAllByAuthor` juga sudah dipikirkan sejak awal. Belum ada bug yang muncul di luar ekspektasi setelah implementasi selesai, yang menunjukkan bahwa test sudah cukup merepresentasikan behavior yang diharapkan. Jika langsung menulis kode dulu tanpa test, kemungkinan besar banyak skenario-skenario test terutana unhappy path yang bakal terlewat.
+
+- **Maintainability**: Tahap [REFACTOR] memungkinkan peningkatan desain kode tanpa merusak fungsionalitas. Misalnya seperti saat mengganti hardcoded strings dengan OrderStatus enum. Dengan adanya unit test yang sudah jalan, kita bisa refactor dengan lebih percaya diri dan hanya perlu memastikan semua test masih hijau. Tanpa test, kegiatan refactoring akan cukup berisiko.
+
+- **Productive Workflow**: Proses ini memang butuh waktu lebih di awal karena harus memikirkan requirements dan menuliskan test dulu sebelum kodenya ada, tetapi feedback loop-nya menjadi lebih cepat. Begitu ada yang salah, langsung dapat diketahui dari hasil test, tanpa perlu debug manual satu-satu.
+
+### 2. F.I.R.S.T. Principle
+Unit test yang telah dibuat dalam tutorial ini telah memenuhi prinsip F.I.R.S.T. dengan rincian sebagai berikut:
+
+- **Fast**: Test berjalan cepat karena hanya menguji logika internal class seperti `Order` dan `OrderRepository`. Untuk `OrderServiceImplTest`, kita pakai `Mockito` untuk mock `OrderRepository`-nya, jadi tidak ada akses ke database asli yang dapat membuat testing menjadi lambat.
+
+- **Isolated/Independent**: Setiap test case berdiri sendiri. Method `setUp()` dengan anotasi `@BeforeEach` dipakai untuk menyiapkan data awal (seperti list `products` dan objek `Order`) dari nol sebelum setiap test jalan, jadi satu test tidak akan mempengaruhi test lainnya.
+
+- **Repeatable**: Hasil test konsisten meskipun dijalankan berkali-kali, karena tidak bergantung pada kondisi eksternal seperti database atau waktu sistem. State yang digunakan selalu disiapkan ulang dari `setUp()`.
+
+- **Self-Validating**: Setiap test punya assertion yang jelas. Ada `assertEquals` untuk mengecek nilai, `assertNull` untuk yang tidak ketemu, dan `assertThrows` untuk memverifikasi bahwa exception yang benar dilempar (misalnya waktu products kosong atau status tidak valid).
+
+- **Thorough/Timely** — Test sudah thorough karena mencakup happy path dan unhappy path. Kemudian karena test ditulis sebelum implementasi kode, sesuai alur TDD yang diikuti dari awal, prinsip timely juga sudah terpenuhi.
+
+</details>
+
