@@ -8,22 +8,22 @@ import java.util.Map;
 
 @Getter
 public class Payment {
-    private String paymentId;
-    private String paymentMethod;
-    private String paymentStatus;
+    private String id;
+    private String method;
+    private String status;
     private Map<String, String> paymentData;
 
     public Payment(String id, String method, Order order, Map<String, String> paymentData) {
-        this.paymentId = id;
-        this.paymentMethod = method;
+        this.id = id;
+        this.method = method;
         this.paymentData = paymentData;
 
         if (method.equals(PaymentMethod.VOUCHER.getValue())) {
-            this.paymentStatus = validateVoucher(paymentData.get("voucherCode"))
+            this.status = validateVoucher(paymentData.get("voucherCode"))
                     ? PaymentStatus.SUCCESS.getValue()
                     : PaymentStatus.REJECTED.getValue();
         } else {
-            this.paymentStatus = PaymentStatus.PENDING.getValue();
+            this.status = PaymentStatus.PENDING.getValue();
         }
     }
 
@@ -36,9 +36,9 @@ public class Payment {
         return digitCount == 8;
     }
 
-    public void setPaymentStatus(String paymentStatus) {
+    public void setStatus(String paymentStatus) {
         if (PaymentStatus.contains(paymentStatus)) {
-            this.paymentStatus = paymentStatus;
+            this.status = paymentStatus;
         }
     }
 }
