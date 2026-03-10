@@ -5,6 +5,8 @@
 <h1>Create Order</h1>
 <form method="post" th:action="@{/order/create}">
     <label>Author: <input type="text" name="author"/></label><br/>
+    <label>Product Name: <input type="text" name="productName"/></label><br/>
+    <label>Product Quantity: <input type="number" name="productQuantity"/></label><br/>
     <button type="submit">Create Order</button>
 </form>
 </body>
