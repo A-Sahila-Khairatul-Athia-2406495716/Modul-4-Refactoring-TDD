@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><title>Order List</title></head>
+<body>
+<h1>Orders</h1>
+<table>
+    <tr>
+        <th>ID</th><th>Author</th><th>Status</th><th>Action</th>
+    </tr>
+    <tr th:each="order : ${orders}">
+        <td th:text="${order.id}"></td>
+        <td th:text="${order.author}"></td>
+        <td th:text="${order.status}"></td>
+        <td><a th:href="@{/order/pay/{id}(id=${order.id})}">Pay</a></td>
+    </tr>
+</table>
+</body>
+</html>
