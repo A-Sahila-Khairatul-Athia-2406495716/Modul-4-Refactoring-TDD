@@ -12,11 +12,13 @@ public class Payment {
     private String method;
     private String status;
     private Map<String, String> paymentData;
+    private Order order;
 
     public Payment(String id, String method, Order order, Map<String, String> paymentData) {
         this.id = id;
         this.method = method;
         this.paymentData = paymentData;
+        this.order = order;
 
         if (method.equals(PaymentMethod.VOUCHER.getValue())) {
             this.status = validateVoucher(paymentData.get("voucherCode"))
