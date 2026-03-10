@@ -35,9 +35,9 @@ class PaymentTest {
     void testCreatePaymentValidVoucher() {
         paymentData.put("voucherCode", "ESHOP1234ABC5678");
         Payment payment = new Payment("pay-001", PaymentMethod.VOUCHER.getValue(), order, paymentData);
-        assertEquals("pay-001", payment.getPaymentId());
-        assertEquals(PaymentMethod.VOUCHER.getValue(), payment.getPaymentMethod());
-        assertEquals(PaymentStatus.SUCCESS.getValue(), payment.getPaymentStatus());
+        assertEquals("pay-001", payment.getId());
+        assertEquals(PaymentMethod.VOUCHER.getValue(), payment.getMethod());
+        assertEquals(PaymentStatus.SUCCESS.getValue(), payment.getStatus());
     }
 
     // Unhappy Paths
@@ -46,27 +46,27 @@ class PaymentTest {
     void testCreatePaymentVoucherNot16Chars() {
         paymentData.put("voucherCode", "ESHOP123ABC");
         Payment payment = new Payment("pay-002", PaymentMethod.VOUCHER.getValue(), order, paymentData);
-        assertEquals(PaymentStatus.REJECTED.getValue(), payment.getPaymentStatus());
+        assertEquals(PaymentStatus.REJECTED.getValue(), payment.getStatus());
     }
 
     @Test
     void testCreatePaymentVoucherNotStartWithESHOP() {
         paymentData.put("voucherCode", "ABCDE1234ABC5678");
         Payment payment = new Payment("pay-003", PaymentMethod.VOUCHER.getValue(), order, paymentData);
-        assertEquals(PaymentStatus.REJECTED.getValue(), payment.getPaymentStatus());
+        assertEquals(PaymentStatus.REJECTED.getValue(), payment.getStatus());
     }
 
     @Test
     void testCreatePaymentVoucherNot8Digits() {
         paymentData.put("voucherCode", "ESHOPABCDEFGHIJK");
         Payment payment = new Payment("pay-004", PaymentMethod.VOUCHER.getValue(), order, paymentData);
-        assertEquals(PaymentStatus.REJECTED.getValue(), payment.getPaymentStatus());
+        assertEquals(PaymentStatus.REJECTED.getValue(), payment.getStatus());
     }
 
     @Test
     void testCreatePaymentVoucherCodeNull() {
         paymentData.put("voucherCode", null);
         Payment payment = new Payment("pay-005", PaymentMethod.VOUCHER.getValue(), order, paymentData);
-        assertEquals(PaymentStatus.REJECTED.getValue(), payment.getPaymentStatus());
+        assertEquals(PaymentStatus.REJECTED.getValue(), payment.getStatus());
     }
 }
