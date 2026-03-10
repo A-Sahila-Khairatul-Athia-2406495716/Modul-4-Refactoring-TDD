@@ -113,4 +113,11 @@ class PaymentTest {
         Payment payment = new Payment("pay-010", PaymentMethod.BANK_TRANSFER.getValue(), order, paymentData);
         assertEquals(PaymentStatus.REJECTED.getValue(), payment.getStatus());
     }
+
+    @Test
+    void testCreatePaymentUnknownMethod() {
+        paymentData.put("voucherCode", "ESHOP678");
+        Payment payment = new Payment("pay-004", "UNKNOWN_METHOD", order, paymentData);
+        assertEquals(PaymentStatus.PENDING.getValue(), payment.getStatus());
+    }
 }

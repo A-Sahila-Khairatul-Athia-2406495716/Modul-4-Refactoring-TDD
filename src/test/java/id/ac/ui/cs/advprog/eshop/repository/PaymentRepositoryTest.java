@@ -83,4 +83,15 @@ class PaymentRepositoryTest {
         List<Payment> all = paymentRepository.getAllPayments();
         assertEquals(2, all.size());
     }
+
+    @Test
+    void testGetPaymentByIdZeroMatch() {
+        Map<String, String> data = new HashMap<>();
+        data.put("voucherCode", "ESHOP1234ABC5678");
+        paymentRepository.save(new Payment("pay-001", PaymentMethod.VOUCHER.getValue(), order, data));
+        paymentRepository.save(new Payment("pay-002", PaymentMethod.VOUCHER.getValue(), order, data));
+
+        Payment result = paymentRepository.getPayment("nonexistent");
+        assertNull(result);
+    }
 }
