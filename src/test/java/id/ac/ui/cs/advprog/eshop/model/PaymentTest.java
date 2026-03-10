@@ -117,7 +117,17 @@ class PaymentTest {
     @Test
     void testCreatePaymentUnknownMethod() {
         paymentData.put("voucherCode", "ESHOP678");
-        Payment payment = new Payment("pay-004", "UNKNOWN_METHOD", order, paymentData);
+        Payment payment = new Payment("pay-011", "UNKNOWN_METHOD", order, paymentData);
         assertEquals(PaymentStatus.PENDING.getValue(), payment.getStatus());
+    }
+
+    @Test
+    void testSetStatusInvalidStatus() {
+        paymentData.put("voucherCode", "ESHOP1234ABC5678");
+        Payment payment = new Payment("pay-012", PaymentMethod.VOUCHER.getValue(), order, paymentData);
+
+        payment.setStatus("INVALID_STATUS");
+
+        assertEquals(PaymentStatus.SUCCESS.getValue(), payment.getStatus());
     }
 }

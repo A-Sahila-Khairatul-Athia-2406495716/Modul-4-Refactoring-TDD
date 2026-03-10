@@ -18,28 +18,28 @@ public class PaymentController {
 
     @GetMapping("/detail")
     public String paymentDetailForm() {
-        return "paymentDetail";
+        return "PaymentDetail";
     }
 
     @GetMapping("/detail/{paymentId}")
     public String paymentDetail(@PathVariable String paymentId, Model model) {
         Payment payment = paymentService.getPayment(paymentId);
         model.addAttribute("payment", payment);
-        return "paymentDetailResult";
+        return "PaymentDetailResult";
     }
 
     @GetMapping("/admin/list")
     public String adminPaymentList(Model model) {
         List<Payment> payments = paymentService.getAllPayments();
         model.addAttribute("payments", payments);
-        return "paymentAdminList";
+        return "PaymentAdminList";
     }
 
     @GetMapping("/admin/detail/{paymentId}")
     public String adminPaymentDetail(@PathVariable String paymentId, Model model) {
         Payment payment = paymentService.getPayment(paymentId);
         model.addAttribute("payment", payment);
-        return "paymentAdminDetail";
+        return "PaymentAdminDetail";
     }
 
     @PostMapping("/admin/set-status/{paymentId}")
@@ -49,6 +49,6 @@ public class PaymentController {
         Payment payment = paymentService.getPayment(paymentId);
         paymentService.setStatus(payment, status);
         model.addAttribute("payment", payment);
-        return "paymentAdminDetail";
+        return "PaymentAdminDetail";
     }
 }

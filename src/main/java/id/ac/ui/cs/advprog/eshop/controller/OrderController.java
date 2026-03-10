@@ -25,26 +25,26 @@ public class OrderController {
 
     @GetMapping("/create")
     public String createOrderPage() {
-        return "createOrder";
+        return "CreateOrder";
     }
 
     @GetMapping("/history")
     public String orderHistoryPage() {
-        return "orderHistory";
+        return "OrderHistory";
     }
 
     @PostMapping("/history")
     public String orderHistory(@RequestParam String author, Model model) {
         List<Order> orders = orderService.findAllByAuthor(author);
         model.addAttribute("orders", orders);
-        return "orderList";
+        return "OrderList";
     }
 
     @GetMapping("/pay/{orderId}")
     public String payOrderPage(@PathVariable String orderId, Model model) {
         Order order = orderService.findById(orderId);
         model.addAttribute("order", order);
-        return "payOrder";
+        return "PayOrder";
     }
 
     @PostMapping("/pay/{orderId}")
@@ -57,6 +57,6 @@ public class OrderController {
 
         Payment payment = paymentService.addPayment(order, method, allParams);
         model.addAttribute("paymentId", payment.getId());
-        return "paymentSuccess";
+        return "PaymentSuccess";
     }
 }
